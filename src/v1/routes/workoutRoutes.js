@@ -11,7 +11,7 @@ const router = express.Router();
 router
     .get('/',getAllWorkouts)
     .get('/:workoutId',getOneWorkout)
-    .post('/:workoutId',createNewWorkout)
+    .post('/',createNewWorkout)
     .patch('/:workoutId',updateOneWorkout)
     .delete('/:workoutId',deleteOneWorkout)
 
