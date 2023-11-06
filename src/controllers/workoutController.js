@@ -59,15 +59,15 @@ module.exports = {
       });
     }
 
-    const newWorkout = {
-      name: body.name,
-      mode: body.mode,
-      equipment: body.equipment,
-      exercises: body.exercises,
-      trainerTips: body.trainerTips,
-    };
-
     try {
+      const newWorkout = {
+        name: body.name,
+        mode: body.mode,
+        equipment: body.equipment,
+        exercises: body.exercises,
+        trainerTips: body.trainerTips,
+      };
+
       const createdWorkout = createNewWorkout(newWorkout);
       res.status(201).send({ status: "OK", data: createdWorkout });
     } catch (error) {
@@ -89,22 +89,22 @@ module.exports = {
       res.send({ status: "OK", data: updatedWorkout });
     } catch (error) {
       res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+        .status(error?.status || 500)
+        .send({ status: "FAILED", data: { error: error?.message || error } });
     }
   },
   deleteOneWorkout: (req, res) => {
     const {
       params: { workoutId },
     } = req;
-  
+
     if (!workoutId) {
       res.status(400).send({
         status: "FAILED",
         data: { error: "Parameter ':workoutId' can not be empty" },
       });
     }
-  
+
     try {
       deleteOneWorkout(workoutId);
       res.status(204).send({ status: "OK" });
@@ -113,5 +113,5 @@ module.exports = {
         .status(error?.status || 500)
         .send({ status: "FAILED", data: { error: error?.message || error } });
     }
-  }
+  },
 };

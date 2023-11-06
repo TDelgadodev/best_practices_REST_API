@@ -25,15 +25,19 @@ module.exports = {
     }
   },
   createNewWorkout: (newWorkout) => {
-    const workoutToInsert = {
-      ...newWorkout,
-      id: uuid(),
-      createdAt: new Date().toLocaleString("en-es", { timeZone: "UTC" }),
-      updatedAt: new Date().toLocaleString("en-es", { timeZone: "UTC" }),
-    };
-
-    const createdWorkout = createNewWorkout(workoutToInsert);
-    return createdWorkout;
+    try {
+      const workoutToInsert = {
+        ...newWorkout,
+        id: uuid(),
+        createdAt: new Date().toLocaleString("en-es", { timeZone: "UTC" }),
+        updatedAt: new Date().toLocaleString("en-es", { timeZone: "UTC" }),
+      };
+  
+      const createdWorkout = createNewWorkout(workoutToInsert);
+      return createdWorkout; 
+    } catch (error) {
+      throw error
+    }
   },
   updateOneWorkout: (workoutId, changes) => {
     try {
