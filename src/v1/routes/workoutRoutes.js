@@ -12,7 +12,7 @@ router
     .get('/',getAllWorkouts)
     .get('/:workoutId',getOneWorkout)
     .post('/',createNewWorkout)
-    .patch('/:workoutId',updateOneWorkout)
+    .put('/:workoutId',updateOneWorkout)
     .delete('/:workoutId',deleteOneWorkout)
 
 module.exports = router

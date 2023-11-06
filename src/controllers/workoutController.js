@@ -42,7 +42,7 @@ module.exports = {
   },
   createNewWorkout: (req, res) => {
     const { body } = req;
-    
+
     if (
       !body.name ||
       !body.mode ||
@@ -77,11 +77,41 @@ module.exports = {
     }
   },
   updateOneWorkout: (req, res) => {
-    const updatedWorkout = updateOneWorkout(req.params.workoutId);
-    res.send(`Update workout ${req.params.workoutId}`, updatedWorkout);
+    try {
+      const {
+        body,
+        params: { workoutId },
+      } = req;
+      if (!workoutId) {
+        return "Workout not found";
+      }
+      const updatedWorkout = updateOneWorkout(workoutId, body);
+      res.send({ status: "OK", data: updatedWorkout });
+    } catch (error) {
+      res
+      .status(error?.status || 500)
+      .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
   },
   deleteOneWorkout: (req, res) => {
-    deleteOneWorkout(req.params.workoutId);
-    res.send(`Delete workout ${req.params.workoutId}`);
-  },
+    const {
+      params: { workoutId },
+    } = req;
+  
+    if (!workoutId) {
+      res.status(400).send({
+        status: "FAILED",
+        data: { error: "Parameter ':workoutId' can not be empty" },
+      });
+    }
+  
+    try {
+      deleteOneWorkout(workoutId);
+      res.status(204).send({ status: "OK" });
+    } catch (error) {
+      res
+        .status(error?.status || 500)
+        .send({ status: "FAILED", data: { error: error?.message || error } });
+    }
+  }
 };
