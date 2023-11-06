@@ -1,4 +1,5 @@
 const express = require("express");
+const apicache = require("apicache");
 const {
   getAllWorkouts,
   getOneWorkout,
@@ -7,10 +8,12 @@ const {
   updateOneWorkout,
 } = require("../../controllers/workoutController");
 const { getRecordForWorkout } = require("../../controllers/recordController");
+
 const router = express.Router();
+const cache = apicache.middleware;
 
 router
-  .get("/", getAllWorkouts)
+  .get("/", cache('3 minutes'), getAllWorkouts)
   .get("/:workoutId", getOneWorkout)
   .get("/:workoutId/record", getRecordForWorkout)
   .post("/", createNewWorkout)
