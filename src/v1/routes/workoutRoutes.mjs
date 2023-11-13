@@ -1,15 +1,8 @@
-const express = require("express");
-const apicache = require("apicache");
-const {
-  getAllWorkouts,
-  getOneWorkout,
-  createNewWorkout,
-  deleteOneWorkout,
-  updateOneWorkout,
-} = require("../../controllers/workoutController");
-const { getRecordForWorkout } = require("../../controllers/recordController");
+import { Router } from "express";
+import { getAllWorkouts, getOneWorkout, createNewWorkout, deletedOneWorkout, updatedOneWorkout } from "../../controllers/workoutController.js";
+import { getRecordForWorkout } from "../../controllers/recordController.js";
 
-const router = express.Router();
+const router = Router();
 
 /**
  * @openapi
@@ -60,7 +53,7 @@ router
   .get("/:workoutId", getOneWorkout)
   .get("/:workoutId/record", getRecordForWorkout)
   .post("/", createNewWorkout)
-  .patch("/:workoutId", updateOneWorkout)
-  .delete("/:workoutId", deleteOneWorkout);
+  .patch("/:workoutId", updatedOneWorkout)
+  .delete("/:workoutId", deletedOneWorkout);
 
-module.exports = router;
+export default router;

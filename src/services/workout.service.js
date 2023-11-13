@@ -1,30 +1,32 @@
-const { v4: uuid } = require("uuid");
-const {
+import { v4 as uuid } from "uuid";
+import {
   getAllWorkouts,
   createNewWorkout,
   getOneWorkout,
   updateOneWorkout,
   deleteOneWorkout
-} = require("../database/Workout");
+} from "../database/Workout.js";
 
-module.exports = {
-  getAllWorkouts: (filterParams) => {
+
+  export const getAllWorkoutsForDb = (filterParams) => {
     try {
       const allWorkouts = getAllWorkouts(filterParams);
       return allWorkouts;
     } catch (error) {
       throw error;
     }
-  },
-  getOneWorkout: (workoutId) => {
+  }
+
+  export const getOneWorkoutFromDB = (workoutId) => {
     try {
       const workout = getOneWorkout(workoutId);
       return workout;
     } catch (error) {
       throw error;
     }
-  },
-  createNewWorkout: (newWorkout) => {
+  }
+  
+  export const createOneNewWorkout = (newWorkout) => {
     try {
       const workoutToInsert = {
         ...newWorkout,
@@ -38,20 +40,21 @@ module.exports = {
     } catch (error) {
       throw error
     }
-  },
-  updateOneWorkout: (workoutId, changes) => {
+  }
+  export const updateOneWorkoutDB = (workoutId, changes) => {
     try {
       const updatedWorkout = updateOneWorkout(workoutId,changes)
       return updatedWorkout
     } catch (error) {
       throw error;
     }
-  },
-  deleteOneWorkout: (workoutId) => {
+  }
+
+  export const deleteOneWorkoutDB = (workoutId) => {
     try {
       deleteOneWorkout(workoutId);
     } catch (error) {
       throw error;
     }
   }
-};
+

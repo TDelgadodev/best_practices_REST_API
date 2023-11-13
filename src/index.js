@@ -1,19 +1,15 @@
-const express = require('express');
-const apicache = require('apicache');
+import app from "./app.js";
+import { connectDb } from "./config/db.js";
 
-const v1WorkoutRouter = require('./v1/routes/workoutRoutes');
-const { swaggerDocs: V1SwaggerDocs } = require('./v1/swagger')
+async function main() {
+  try {
+    await connectDb();
+    app.listen(PORT);
+    console.log(`Listening on port http://localhost:${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV}`)
+  } catch (error) {
+    console.error(error);
+  }
+}
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-const cache = apicache.middleware;
-
-app.use(express.json());
-app.use(cache('3 minutes'))
-app.use('/api/v1/workouts',v1WorkoutRouter);
-
-app.listen(PORT, () => {
-    console.log(`🚀 Server listening on port ${PORT}`);
-    V1SwaggerDocs(app,PORT)
-})
-
+main();

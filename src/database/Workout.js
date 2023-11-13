@@ -1,5 +1,6 @@
-const { saveToDatabase } = require("./utils");
-const DB = require("./db.json");
+import { saveToDatabase } from "./utils.js"; 
+import DB  from "./db.json" assert { type: "json" };
+
 
 
 /**
@@ -40,7 +41,7 @@ const DB = require("./db.json");
  *             type: string
  *           example: ["Split the 21 thrusters as needed", "Try to do the 9 and 6 thrusters unbroken", "RX Weights: 115lb/75lb"]
  */
-const getAllWorkouts = (filterParams) => {
+export const getAllWorkouts = (filterParams) => {
   try {
     let workouts = DB.workouts;
     if (filterParams.mode) {
@@ -54,7 +55,7 @@ const getAllWorkouts = (filterParams) => {
   }
 };
 
-const getOneWorkout = (workoutId) => {
+export const getOneWorkout = (workoutId) => {
   try {
     const workout = DB.workouts.find((workout) => workout.id === workoutId);
 
@@ -71,7 +72,7 @@ const getOneWorkout = (workoutId) => {
   }
 };
 
-const createNewWorkout = (newWorkout) => {
+export const createNewWorkout = (newWorkout) => {
   try {
     const isAlreadyAdded =
       DB.workouts.findIndex((workout) => workout.name === newWorkout.name) > -1;
@@ -92,7 +93,7 @@ const createNewWorkout = (newWorkout) => {
   }
 };
 
-const updateOneWorkout = (workoutId, changes) => {
+export const updateOneWorkout = (workoutId, changes) => {
   try {
     const indexForUpdate = DB.workouts.findIndex(
       (workout) => workout.id === workoutId
@@ -113,7 +114,7 @@ const updateOneWorkout = (workoutId, changes) => {
   }
 };
 
-const deleteOneWorkout = (workoutId) => {
+export const deleteOneWorkout = (workoutId) => {
   try {
     const indexForDeletion = DB.workouts.findIndex(
       (workout) => workout.id === workoutId
@@ -131,10 +132,4 @@ const deleteOneWorkout = (workoutId) => {
   }
 };
 
-module.exports = {
-  getAllWorkouts,
-  getOneWorkout,
-  createNewWorkout,
-  updateOneWorkout,
-  deleteOneWorkout
-};
+

@@ -1,5 +1,5 @@
-const swaggerJSDoc = require("swagger-jsdoc");
-const swaggerUi = require("swagger-ui-express");
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 // Basic Meta Informations about our API
 const options = {
@@ -27,4 +27,4 @@ const swaggerDocs = (app, port) => {
   );
 };
 
-module.exports = { swaggerDocs };
+export { swaggerDocs }

@@ -1,4 +1,4 @@
-const recordService = require("../services/record.service");
+import  recordService from "../services/record.service.js";
 
 const getRecordForWorkout = (req, res) => {
   const {
@@ -23,4 +23,4 @@ const getRecordForWorkout = (req, res) => {
   }
 };
 
-module.exports = { getRecordForWorkout };
+export { getRecordForWorkout };

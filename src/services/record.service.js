@@ -1,4 +1,4 @@
-const Record = require("../database/Record");
+import Record from "../database/Record.js";
 
 const getRecordForWorkout = (workoutId) => {
   try {
@@ -9,4 +9,4 @@ const getRecordForWorkout = (workoutId) => {
   }
 };
 
-module.exports = { getRecordForWorkout };
+export default { getRecordForWorkout };

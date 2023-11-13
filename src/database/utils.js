@@ -1,9 +1,9 @@
-const fs = require("fs");
+import fs from "fs";
+import DB from "./db.json" assert { type: "json" };
 
-const saveToDatabase = (DB) => {
+
+export const saveToDatabase = (DB) => {
   fs.writeFileSync("./src/database/db.json", JSON.stringify(DB, null, 2), {
     encoding: "utf8",
   });
 };
-
-module.exports = { saveToDatabase };

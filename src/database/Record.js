@@ -1,8 +1,8 @@
-const DB = require("./db.json");
+import { records } from "./db.json";
 
 const getRecordForWorkout = (workoutId) => {
   try {
-    const record = DB.records.filter((record) => record.workout === workoutId);
+    const record = records.filter((record) => record.workout === workoutId);
     if (!record) {
       throw {
         status: 400,
@@ -16,4 +16,4 @@ const getRecordForWorkout = (workoutId) => {
   }
 };
 
-module.exports = { getRecordForWorkout };
+export default { getRecordForWorkout };
