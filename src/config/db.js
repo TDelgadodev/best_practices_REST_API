@@ -1,17 +1,14 @@
-import { set, connect } from 'mongoose';
+import mongoose from 'mongoose';
 
-export const connectDb = async () =>{
-    try {
-        set('strictQuery',false)
-        const connection= await connect(process.env.DB_CONNECTION,{
-            useNewUrlParser : true,
-            useUnifiedTopology : true,
-        })
+export async function connectDb() {
+  try {
+    const dbURI = process.env.DB_CONNECTION;
+    const connection = await mongoose.connect(dbURI, {
+    });
 
-        const url =  `${connection.connection.host}:${connection.connection.port}`;
-        console.log('Mongo DB connect in: ' + url);
-    } catch (error) {
-        console.log(error.message);
-    }
+    const url = `${connection.connection.host}:${connection.connection.port}`;
+    console.log('Mongo DB connect in: ' + url);
+  } catch (error) {
+    console.error('Error de conexión a la base de datos:', error);
+  }
 }
-

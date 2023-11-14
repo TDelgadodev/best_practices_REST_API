@@ -6,61 +6,73 @@ import {
   deleteOneWorkoutDB,
 } from "../services/workout.service.js";
 
-export const getAllWorkouts = (req, res) => {
-  const { mode } = req.query;
+export const getAllWorkouts = async (req, res) => {
   try {
-    const allWorkouts = getAllWorkoutsForDb({ mode });
-    res.send({ status: "OK", data: allWorkouts });
+    const { mode } = req.query;
+    const allWorkouts = await getAllWorkoutsForDb({ mode });
+    res.status(200).json({ status: "OK", data: allWorkouts });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).json({
+      status: "FAILED",
+      data: { error: error?.message || "Internal Server Error" },
+    });
   }
 };
 
-export const getOneWorkout = (req, res) => {
-  const {
-    params: { workoutId },
-  } = req;
-
-  if (!workoutId) {
-    res.status(400).send({
-      status: "FAILED",
-      data: { error: "Parameter ':workoutId' can not be empty" },
-    });
-    return;
-  }
-
+export const getOneWorkout = async (req, res) => {
   try {
-    const workout = getOneWorkoutFromDB(workoutId);
-    res.send({ status: "OK", data: workout });
+    const {
+      params: { workoutId },
+    } = req;
+
+    if (!workoutId) {
+      res.status(400).json({
+        status: "FAILED",
+        data: { error: "Parameter ':workoutId' can not be empty" },
+      });
+      return;
+    }
+
+    const workout = await getOneWorkoutFromDB(workoutId);
+
+    if (!workout) {
+      res.status(404).json({
+        status: "FAILED",
+        data: { error: `Workout with ID '${workoutId}' not found` },
+      });
+      return;
+    }
+
+    res.status(200).json({ status: "OK", data: workout });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).json({
+      status: "FAILED",
+      data: { error: error?.message || "Internal Server Error" },
+    });
   }
 };
 
-export const createNewWorkout = (req, res) => {
-  const { body } = req;
-
-  if (
-    !body.name ||
-    !body.mode ||
-    !body.equipment ||
-    !body.exercises ||
-    !body.trainerTips
-  ) {
-    res.status(400).send({
-      status: "FAILED",
-      data: {
-        error:
-          "One of the following keys is missing or is empty in request body: 'name', 'mode', 'equipment', 'exercises', 'trainerTips'",
-      },
-    });
-  }
-
+export const createNewWorkout = async (req, res) => {
   try {
+    const { body } = req;
+
+    if (
+      !body.name ||
+      !body.mode ||
+      !body.equipment ||
+      !body.exercises ||
+      !body.trainerTips
+    ) {
+      res.status(400).json({
+        status: "FAILED",
+        data: {
+          error:
+            "One of the following keys is missing or is empty in request body: 'name', 'mode', 'equipment', 'exercises', 'trainerTips'",
+        },
+      });
+      return;
+    }
+
     const newWorkout = {
       name: body.name,
       mode: body.mode,
@@ -69,50 +81,61 @@ export const createNewWorkout = (req, res) => {
       trainerTips: body.trainerTips,
     };
 
-    const createdWorkout = createOneNewWorkout(newWorkout);
-    res.status(201).send({ status: "OK", data: createdWorkout });
+    const createdWorkout = await createOneNewWorkout(newWorkout);
+    res.status(201).json({ status: "OK", data: createdWorkout });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILDED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).json({
+      status: "FAILED",
+      data: { error: error?.message || "Internal Server Error" },
+    });
   }
 };
 
-export const updatedOneWorkout = (req, res) => {
+export const updatedOneWorkout = async (req, res) => {
   try {
     const {
       body,
       params: { workoutId },
     } = req;
-    if (!workoutId) {
-      return "Workout not found";
-    }
-    const updatedWorkout = updateOneWorkoutDB(workoutId, body);
-    res.send({ status: "OK", data: updatedWorkout });
-  } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
-  }
-};
-export const deletedOneWorkout = (req, res) => {
-  const {
-    params: { workoutId },
-  } = req;
 
-  if (!workoutId) {
-    res.status(400).send({
+    if (!workoutId) {
+      res.status(400).json({
+        status: "FAILED",
+        data: { error: "Parameter ':workoutId' can not be empty" },
+      });
+      return;
+    }
+
+    const updatedWorkout = await updateOneWorkoutDB(workoutId, body);
+    res.status(200).json({ status: "OK", data: updatedWorkout });
+  } catch (error) {
+    res.status(error?.status || 500).json({
       status: "FAILED",
-      data: { error: "Parameter ':workoutId' can not be empty" },
+      data: { error: error?.message || "Internal Server Error" },
     });
   }
+};
 
+export const deletedOneWorkout = async (req, res) => {
   try {
-    deleteOneWorkoutDB(workoutId);
-    res.status(204).send({ status: "OK" });
+    const {
+      params: { workoutId },
+    } = req;
+
+    if (!workoutId) {
+      res.status(400).json({
+        status: "FAILED",
+        data: { error: "Parameter ':workoutId' can not be empty" },
+      });
+      return;
+    }
+
+    await deleteOneWorkoutDB(workoutId);
+    res.status(204).json({ status: "OK" });
   } catch (error) {
-    res
-      .status(error?.status || 500)
-      .send({ status: "FAILED", data: { error: error?.message || error } });
+    res.status(error?.status || 500).json({
+      status: "FAILED",
+      data: { error: error?.message || "Internal Server Error" },
+    });
   }
 };
